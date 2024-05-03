@@ -27,7 +27,7 @@ for (var row = 0; row < ROWS_COUNT; row++) {
     cells[row][col] = new Cell();
   }
 }
-console.log(cells);
+
 //
 // TODO: Task 1 - add some bombs at fixed positions.
 // cells[0][1].isBomb = true;
@@ -63,27 +63,29 @@ render();
 
 function discoverCell(row, col) {
   // TODO: Task 5 - Reveal cells when clicked.
-  if (cells[row][col].discovered === true ) return;
-cells[row][col].discovered = true;
-  
-// TODO: Task 6 - Discover neighbor cells recursively, as long as there are no adjacent bombs to the current cell.
-const neighborAmount = countAdjacentBombs(row, col);
-if (neighborAmount === 0) {
-  for (let i = row -1; i <= row +1; i++) {
-    for (let j = col -1; j <= col +1; j++) {
-      if (cells[i] && cells[i][j] && !cells[i][j].discovered  && !cells[i][j].hasBeenFlagged) {
-        discoverCell(i, j)
+  if (cells[row][col].hasBeenFlagged === true ) {return}
+  cells[row][col].discovered = true;
+    
+  // TODO: Task 6 - Discover neighbor cells recursively, as long as there are no adjacent bombs to the current cell.
+  const neighborAmount = countAdjacentBombs(row, col);
+  if (neighborAmount === 0) {
+    for (let i = row -1; i <= row +1; i++) {
+      for (let j = col -1; j <= col +1; j++) {
+        if (cells[i] && cells[i][j] && !cells[i][j].discovered) {
+          discoverCell(i, j);
+        }
       }
-    }
-  } 
-}
-  
+    } 
+  }
   // TODO: Task 8 - Implement defeat. If the player "discovers" a bomb (clicks on it without holding shift), set the variable defeat to true.
-  //
+  
+  if (cells[row][col].isBomb) {
+    defeat = true;
+  }
 }
 
 function flagCell(row, col) {
-  //
+  cells[row][col].hasBeenFlagged = true;
   // TODO: Task 7 - Implement flags. Flags allow the player to mark cells that they think contain a bomb.
   //                When clicking a cell and holding shift, function flagCell() will be called for you.
   //
@@ -94,12 +96,20 @@ function flagCell(row, col) {
 
 function countAdjacentBombs(row, col) {
   let bombsAcount = 0;
-  let checkRow  = row;
-  let checkcolum = col;
-  
-// if (cells[row] && cells[row][col-1] && cells[row][col-1].isBomb) {
-//   bombsAcount += 1;
-// } else if (cells[row] && cells[row][col+1] && cells[row][col+1].isBomb) {
+
+  for (let i = row -1; i <= row +1; i++) {
+    for (let j = col -1; j <=col +1; j++) {
+      if (cells[i] && cells[i][j] && cells[i][j].isBomb) {
+        bombsAcount += 1;
+      }
+    }
+   
+  }
+  return bombsAcount;
+}
+    // if (cells[row] && cells[row][col-1] && cells[row][col-1].isBomb) {
+    //   bombsAcount += 1;
+    // } else if (cells[row] && cells[row][col+1] && cells[row][col+1].isBomb) {
 //   bombsAcount += 1;
 // } else if (cells[row+1] && cells[row+1][col-1] && cells[row+1][col-1].isBomb) {
 //   bombsAcount += 1;
@@ -114,22 +124,10 @@ function countAdjacentBombs(row, col) {
 // } else if (cells[row-1] && cells[row-1][col] && cells[row-1][col].isBomb) {
 //   bombsAcount += 1;
 // }
-
-for (let i = row -1; i <= row +1; i++) {
-  for (let j = col -1; j <=col +1; j++) {
-    if (cells[i] && cells[i][j] && cells[i][j].isBomb) {
-      bombsAcount += 1;
-    }
-  }
-}
-
-
 // console.log(countAdjacentBombs(5,5));
 // TODO: Task 4 - Adjacent bombs are bombs in cells touching our cell (also diagonally). Implement this function
 //                so that it returns the count of adjacent cells with bombs in them.
 
-return bombsAcount;
-}
 
 
 function getBombsCount() {
