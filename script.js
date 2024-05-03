@@ -6,6 +6,8 @@ const ROWS_COUNT = 10;
 const COLS_COUNT = 10;
 const BOMBS_COUNT = 20;
 
+let discoverdCells = 0;
+
 // const BOMBS_COUNT = 
 // console.log(BOMBS_COUNT);
 
@@ -65,6 +67,7 @@ function discoverCell(row, col) {
   // TODO: Task 5 - Reveal cells when clicked.
   if (cells[row][col].hasBeenFlagged === true ) {return}
   cells[row][col].discovered = true;
+  discoverdCells += 1;
     
   // TODO: Task 6 - Discover neighbor cells recursively, as long as there are no adjacent bombs to the current cell.
   const neighborAmount = countAdjacentBombs(row, col);
@@ -130,25 +133,22 @@ function countAdjacentBombs(row, col) {
 
 
 
+// TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
 function getBombsCount() {
-  //
-  // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
-  //
-  return 0;
+  return BOMBS_COUNT;
 }
 
+// TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
 function getClearedCells() {
-  //
-  // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
-  //
-  return 0;
+  
+  return discoverdCells;
 }
 
+// TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
 function getTotalCellsToClear() {
-  //
-  // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
-  //
-  return 0;
+  // cells.discovered = true add getTotalCellsToClear
+
+  return ROWS_COUNT * COLS_COUNT;
 }
 
 function checkForVictory() {
